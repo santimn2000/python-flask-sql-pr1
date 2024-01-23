@@ -1,0 +1,133 @@
+{% extends "maestra.html" %}
+
+{% block title %}Añadir juego{% endblock %}
+
+{% block content %}
+
+<style>
+
+  body{
+    padding: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .radio-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  input[type="radio"] {
+    margin-right: 5px;
+  }
+</style>
+
+<form action="/addVideojuego" method="post" enctype="multipart/form-data" onsubmit="return validarFormulario()">
+    <div class="form-group">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre">
+    </div>
+    
+    <div class="form-group">
+      <label for="categoria">Categoría:</label>
+      <select id="categoria" name="categoria">
+        <option value="ACCION">ACCION</option>
+        <option value="AVENTURA">AVENTURA</option>
+        <option value="ESTRATEGIA">ESTRATEGIA</option>
+        <option value="ROL">RPG</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="desarrolladora">Desarrolladora:</label>
+      <input type="text" id="desarrolladora" name="desarrolladora">
+    </div>
+
+    <div class="form-group">
+      <label for="precio">Precio:</label>
+      <input type="number" id="precio" name="precio" step="0.01">
+    </div>
+  
+    <div class="form-group">
+      <label>Multijugador:</label>
+      <div class="radio-group">
+        <input type="radio" id="multi-si" name="multijugador" value="1">
+        <label for="multi-si">Sí</label>
+        <input type="radio" id="multi-no" name="multijugador" value="0">
+        <label for="multi-no">No</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="imagen">Imagen:</label>
+      <input type="file" id="imagen" name="imagen">
+    </div>
+  
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Verificar si hay datos en sessionStorage al cargar la página
+      const usuario = sessionStorage.getItem('usuario');
+      const permisos = sessionStorage.getItem('permisos');
+    
+      // Si no hay datos en sessionStorage, redirigir a la página de inicio de sesión
+      if (!usuario || !permisos) {
+        window.location.href = '/login';
+      }else if(permisos != "ADMIN"){
+        alert("No tienes permiso para acceder aquí");
+        window.location.href= '/lista';
+      }
+      
+    });
+
+    function validarFormulario() {
+      // Verificar el nombre del juego
+      var nombre = document.getElementById('nombre').value;
+      if (nombre.length < 3) {
+          alert('El nombre del juego debe tener al menos 3 letras.');
+          return false;
+      }
+
+      // Verificar la imagen solo si se proporciona un archivo
+      var imagenInput = document.getElementById('imagen');
+      if (imagenInput.files.length > 0) {
+          var imagenValue = imagenInput.value.toLowerCase();
+          if (!imagenValue.endsWith('.jpg') && !imagenValue.endsWith('.png')) {
+              alert('El archivo de imagen debe ser JPG o PNG.');
+              return false;
+          }
+      }
+
+      // Verificar que al menos un radio button esté marcado
+      var radioSi = document.getElementById('multi-si');
+      var radioNo = document.getElementById('multi-no');
+      if (!radioSi.checked && !radioNo.checked) {
+          alert('Debes seleccionar si el juego es multijugador o no.');
+          return false;
+      }
+
+      // Si todo está bien, permitir que el formulario se envíe
+      return true;
+    }
+  </script>
+
+{% endblock %}

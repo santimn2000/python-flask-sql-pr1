@@ -1,0 +1,76 @@
+<html>
+
+<head>
+  <title>{% block title %}{% endblock %}</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"> -->
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <!-- Segunda barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <div class=" collapse navbar-collapse" id="navbar">
+          <ul class="navbar-nav">
+            <li class="p-2 nav-item">
+              <a class="nav-link active" aria-current="page" href="/lista">Lista de Juegos</a> 
+            </li>
+            <li class="p-2 nav-item">
+              <a class="nav-link" href="/add">Agregar Juego</a>
+            </li>
+            <li class="p-2 nav-item">
+              <a class="nav-link" href="/vincular">Vincular Juego</a>
+            </li>
+            <!-- <a class="nav-link active" aria-current="page" href="/lista">Lista de Juegos</a>
+          <a class="nav-link" href="/add">Agregar Juego</a>
+          <a class="nav-link" href="/vincular">Vincular Juego</a> -->
+          </ul>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-nav">
+          <span class="nav-link" id="usuario">Nombre de usuario actual</span>
+          <!-- Reemplaza con el nombre del usuario desde localStorage -->
+          <a class="nav-link" href="#" id="cerrarSesion">Cerrar Sesión</a>
+        </div>
+        
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+  {% endblock %}
+
+  <script>
+    // Obtener el nombre de usuario del sessionStorage
+    const nombreUsuario = sessionStorage.getItem('usuario');
+    console.log(nombreUsuario)
+
+    // Reemplazar el texto 'Nombre de usuario actual' en la barra de navegación con el nombre de usuario obtenido del sessionStorage
+    const nombreUsuarioElement = document.getElementById("usuario");
+    if (nombreUsuario && nombreUsuarioElement) {
+      nombreUsuarioElement.textContent = nombreUsuario;
+    }
+
+
+    // Event listener para el enlace de cerrar sesión
+    const cerrarSesionLink = document.getElementById('cerrarSesion');
+    if (cerrarSesionLink) {
+        cerrarSesionLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Evitar que el enlace redireccione
+
+            // Limpiar los datos del sessionStorage
+            sessionStorage.clear();
+            
+            // Redirigir a la página de inicio de sesión o a donde sea necesario
+            window.location.href = "/login"; // Reemplaza con la ruta adecuada
+        });
+    }
+  </script>
+</body>
+
+</html>

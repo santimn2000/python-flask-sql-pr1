@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Detalles del Juego</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- Agrega tus estilos, enlaces a CSS o cualquier otra configuración aquí -->
+  </head>
+  <body>
+    <div id="tarjeta" class="font-monospace card rounded p-3 m-4 bg-warning text-dark border-primary shadow-lg " style="width: 25rem">
+      <h1 id="titulo" class="card-header m-2">Detalles del Juego</h1>
+      <img src="{{ url_for('obtener_imagen', id=juego.id) }}" alt="{{ juego.nombre }}" class="image-fluid rounded"/>
+      <div class="card-body">
+        <p id="nombre" class="h2">{{ juego.nombre }}</p>
+        <p>Multijugador: {% if juego.multijugador == 1 %} SI {% else %} NO {%endif%}</p>
+        <p>Categoria: {{ juego.categoria }}</p>
+        <p id="precio">Precio: {% if juego.precio == 0.0 %} GRATIS {% else %} {{juego.precio}} {% endif %}</p>
+        <p>Desarrolladora: {{ juego.desarrolladora }}</p>
+      </div>
+      <h3>Plataformas:</h3>
+      <ul class="list-group mb-3">
+        {% for plataforma in plataformas %}
+        <li class="plataforma list-group-item list-group-item-info">{% if plataforma.nombre == "PC" %} {{plataforma.nombre}}({{plataforma.plataforma_compra}}) {% else %} {{plataforma.nombre}}{%endif %}</li>{% endfor %}
+      </ul>
+      <!-- Mostrar otros detalles del juego utilizando {{ juego.atributo }} -->
+
+      <!-- Puedes agregar más contenido según los detalles que quieras mostrar -->
+      <a href="{{ url_for('lista') }}" class="btn btn-primary">Volver</a>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Verificar si hay datos en sessionStorage al cargar la página
+        const usuario = sessionStorage.getItem("usuario");
+        const permisos = sessionStorage.getItem("permisos");
+
+        // Si no hay datos en sessionStorage, redirigir a la página de inicio de sesión
+        if (!usuario || !permisos) {
+          window.location.href = "/login";
+        }
+      });
+    </script>
+  </body>
+</html>
